@@ -9,11 +9,11 @@ from fastapi import(
     status
 )
 from sqlalchemy.orm import Session
-from crud import *
-from database import Base, SessionLocal, engine
-from datatypes import *
+from .crud import *
+from .database import Base, SessionLocal, engine
+from .datatypes import *
 from datetime import datetime
-from schemas import *
+from .schemas import *
 
 Base.metadata.create_all(bind=engine)
 

@@ -1,8 +1,8 @@
 from typing import Generator 
 from sqlalchemy.orm import Session
-from datatypes import *
-from models import User, Image
-from schemas import *
+from .datatypes import *
+from .models import User, Image
+from .schemas import *
 
 users = User
 images = Image

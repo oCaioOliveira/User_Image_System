@@ -1,13 +1,14 @@
-from typing import Generator 
+from typing import Generator
+
+from models.models import Image, User
+from schemas.schemas import CreateImageSchema, CreateUserSchema
 from sqlalchemy.orm import Session
 
-from .datatypes import UpdateUserValuesType, UpdateImageValuesType
-
-from models.models import User, Image
-from schemas.schemas import CreateUserSchema, CreateImageSchema
+from .datatypes import UpdateImageValuesType, UpdateUserValuesType
 
 users = User
 images = Image
+
 
 def create_user(db: Session, user: CreateUserSchema) -> User:
     new_user = User(**user.dict())
@@ -79,6 +80,7 @@ def update_image(
         db.commit()
         db.refresh(image)
         return image
+    return False
 
 
 def remove_image(db: Session, image_id: int) -> bool:

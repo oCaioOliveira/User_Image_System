@@ -1,22 +1,12 @@
-from sqlalchemy.orm import Session
 from typing import Generator
-from fastapi import (
-    APIRouter,
-    Depends,
-    HTTPException,
-    status
-)
 
 from configs.database import Base, SessionLocal, engine
+from fastapi import APIRouter, Depends, HTTPException, status
+from schemas.schemas import CreateUserSchema, UpdateUserSchema
+from sqlalchemy.orm import Session
+from utils.crud import (create_user, remove_user, retrieve_all_users, retrieve_user_with_id,
+                        update_user)
 from utils.datatypes import UserType
-from schemas.schemas import UpdateUserSchema, CreateUserSchema
-from utils.crud import (
-    create_user,
-    retrieve_all_users,
-    retrieve_user_with_id,
-    update_user,
-    remove_user
-    )
 
 user_router = APIRouter()
 
@@ -41,7 +31,8 @@ def get_all_users(db: Session = Depends(get_db)) -> Generator:
     )
 
 
-@user_router.post("", status_code=status.HTTP_201_CREATED, summary='Create user identifying with id')
+@user_router.post("", status_code=status.HTTP_201_CREATED,
+                  summary='Create user identifying with id')
 def post_user(user: CreateUserSchema, db: Session = Depends(get_db),) -> UserType:
     if result := create_user(db, user):
         return result
@@ -50,8 +41,8 @@ def post_user(user: CreateUserSchema, db: Session = Depends(get_db),) -> UserTyp
     )
 
 
-
-@user_router.get("/{user_id}", status_code=status.HTTP_200_OK, summary='Get an especific user by your id')
+@user_router.get("/{user_id}", status_code=status.HTTP_200_OK,
+                 summary='Get an especific user by your id')
 def get_user_with_id(user_id: int, db: Session = Depends(get_db)) -> UserType:
     if result := retrieve_user_with_id(db, user_id):
         return result
@@ -61,7 +52,8 @@ def get_user_with_id(user_id: int, db: Session = Depends(get_db)) -> UserType:
     )
 
 
-@user_router.put("/{user_id}", status_code=status.HTTP_201_CREATED, summary='Put a especific user by your id')
+@user_router.put("/{user_id}", status_code=status.HTTP_201_CREATED,
+                 summary='Put a especific user by your id')
 def put_user(user_id: int, user: UpdateUserSchema, db: Session = Depends(get_db)) -> UserType:
     if result := update_user(
         db, user_id, {
@@ -70,12 +62,13 @@ def put_user(user_id: int, user: UpdateUserSchema, db: Session = Depends(get_db)
     ):
         return result
     raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, 
+        status_code=status.HTTP_404_NOT_FOUND,
         detail=f"User of 'id={user_id}' not found.",
     )
 
 
-@user_router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT, summary='Delete an especific user by your id')
+@user_router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT,
+                    summary='Delete an especific user by your id')
 def delete_user(user_id: int, db: Session = Depends(get_db)) -> None:
     if not remove_user(db, user_id):
         raise HTTPException(

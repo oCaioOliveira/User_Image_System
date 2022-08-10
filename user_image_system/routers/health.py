@@ -1,6 +1,7 @@
-from fastapi import APIRouter
 from datetime import datetime
 from typing import Dict
+
+from fastapi import APIRouter
 
 health_router = APIRouter()
 
@@ -11,10 +12,10 @@ def alive() -> Dict[str, datetime]:
 
 
 @health_router.get('/live', summary='Is the API live?')
-def alive() -> str:
+def live() -> str:
     return 'LIVE'
 
 
 @health_router.get('/ready', summary='Is the API ready?')
-def alive() -> str:
+def ready() -> str:
     return 'READY'

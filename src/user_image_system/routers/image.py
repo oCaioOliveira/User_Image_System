@@ -7,10 +7,10 @@ from fastapi import (
     status
 )
 
-from utils.datatypes import ImageType
-from schemas.schemas import UpdateImageSchema, CreateImageSchema
+from ..utils.datatypes import ImageType
+from ..schemas.schemas import UpdateImageSchema, CreateImageSchema
 from .user import get_db 
-from utils.crud import (
+from ..utils.crud import (
     retrieve_all_images,
     retrieve_images_with_user_id,
     retrieve_image_with_id,

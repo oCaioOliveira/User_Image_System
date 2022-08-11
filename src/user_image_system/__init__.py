@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 
-from routers.health import health_router
-from routers.start import start_router
-from routers.user import user_router
-from routers.image import image_router
+from .routers.health import health_router
+from .routers.start import start_router
+from .routers.user import user_router
+from .routers.image import image_router
 
 
 def create_app() -> FastAPI:

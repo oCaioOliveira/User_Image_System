@@ -1,20 +1,26 @@
 from typing import Generator 
 from sqlalchemy.orm import Session
+from sqlalchemy import exc
 
+from .errors import userNotFound, imageNotFound
 from .datatypes import UpdateUserValuesType, UpdateImageValuesType
 
-from models.models import User, Image
-from schemas.schemas import CreateUserSchema, CreateImageSchema
+from ..models.models import User, Image
+from ..schemas.schemas import CreateUserSchema, CreateImageSchema
 
 users = User
 images = Image
 
 def create_user(db: Session, user: CreateUserSchema) -> User:
     new_user = User(**user.dict())
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    return new_user
+    try:
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        return new_user
+    except exc.SQLAlchemyError as error:
+        print(f'Não foi possivel concluir a trasação por causa de: {error}')
+        raise error
 
 
 def retrieve_all_users(db: Session) -> Generator:
@@ -37,6 +43,7 @@ def update_user(
         db.commit()
         db.refresh(user)
         return user
+    raise userNotFound
 
 
 def remove_user(db: Session, user_id: int) -> bool:
@@ -44,7 +51,7 @@ def remove_user(db: Session, user_id: int) -> bool:
         db.delete(user)
         db.commit()
         return True
-    return False
+    raise userNotFound
 
 
 def create_image(db: Session, image: CreateImageSchema) -> Image:
@@ -79,6 +86,7 @@ def update_image(
         db.commit()
         db.refresh(image)
         return image
+    raise imageNotFound
 
 
 def remove_image(db: Session, image_id: int) -> bool:
@@ -86,4 +94,4 @@ def remove_image(db: Session, image_id: int) -> bool:
         db.delete(image)
         db.commit()
         return True
-    return False
+    raise imageNotFound

@@ -7,10 +7,10 @@ from fastapi import (
     status
 )
 
-from configs.database import Base, SessionLocal, engine
-from utils.datatypes import UserType
-from schemas.schemas import UpdateUserSchema, CreateUserSchema
-from utils.crud import (
+from ..configs.database import Base, SessionLocal, engine
+from ..utils.datatypes import UserType
+from ..schemas.schemas import UpdateUserSchema, CreateUserSchema
+from ..utils.crud import (
     create_user,
     retrieve_all_users,
     retrieve_user_with_id,

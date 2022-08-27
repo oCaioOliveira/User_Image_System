@@ -53,14 +53,14 @@ def post_user(user: CreateUserSchema, db: Session = Depends(get_db),) -> UserTyp
 
 @user_router.get(
     "/filter/{user_id_init}/{user_id_end}", 
-    status_code=status.HTTP_201_CREATED, summary='filter users identifying with an initial and end id '
+    status_code=status.HTTP_200_OK, summary='filter users identifying with an initial and end id '
 )
 def get_filter_users_by_ids(user_id_init: int, user_id_end:int, db: Session = Depends(get_db)) -> list:
     if result := filter_user(db, user_id_init, user_id_end):
         return result
     raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
-        detail=f"List of Users between 'id_initial={user_id_init}' and 'id_initial={user_id_end}' not found."
+        detail=f"List of Users between 'id_initial={user_id_init}' and 'id_final={user_id_end}' not found."
     )
 
 

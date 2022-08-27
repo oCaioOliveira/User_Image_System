@@ -21,8 +21,10 @@ def retrieve_all_users(db: Session) -> Generator:
     return db.query(users).all()
 
 
-def retrieve_user_with_id(db: Session, user_id: int):
-    return db.query(users).filter(users.user_id == user_id).first()
+def retrieve_user_with_id(db: Session, user_id: int) -> User:
+    if user := db.query(users).filter(users.user_id == user_id).first():
+        return user
+    return False 
 
 
 def update_user(
@@ -37,6 +39,19 @@ def update_user(
         db.commit()
         db.refresh(user)
         return user
+
+
+def filter_user(
+    db: Session,
+    user_id_init: int,
+    user_id_end: int
+) -> Generator:
+    list_users = []
+    while(user_id_init <= user_id_end):
+        if user := retrieve_user_with_id(db, user_id_init):
+            list_users.append(user)
+        user_id_init += 1
+    return list_users
 
 
 def remove_user(db: Session, user_id: int) -> bool:

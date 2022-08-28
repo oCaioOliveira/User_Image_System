@@ -16,7 +16,8 @@ from utils.crud import (
     retrieve_image_with_id,
     remove_image,
     create_image,
-    update_image
+    update_image,
+    filter_image
 )
 
 image_router = APIRouter()
@@ -38,6 +39,19 @@ def post_image(image: CreateImageSchema, db: Session = Depends(get_db),) -> Imag
         return result
     raise HTTPException(
         status_code=status.HTTP_400_BAD_REQUEST
+    )
+
+
+@image_router.get(
+    "/filter/{image_id_init}/{image_id_end}", 
+    status_code=status.HTTP_200_OK, summary='filter images identifying with an initial and end id '
+)
+def get_filter_images_by_ids(image_id_init: int, image_id_end:int, db: Session = Depends(get_db)) -> list:
+    if result := filter_image(db, image_id_init, image_id_end):
+        return result
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=f"List of Images between 'id_initial={image_id_init}' and 'id_final={image_id_end}' not found."
     )
 
 

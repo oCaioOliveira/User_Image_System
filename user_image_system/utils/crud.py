@@ -95,6 +95,18 @@ def update_image(
         db.refresh(image)
         return image
 
+def filter_image(
+    db: Session,
+    image_id_init: int,
+    image_id_end: int
+ ) -> Generator:
+    list_images = []
+    while(image_id_init <= image_id_end):
+        if image := retrieve_image_with_id(db, image_id_init):
+            list_images.append(image)
+        image_id_init += 1
+    return list_images
+
 
 def remove_image(db: Session, image_id: int) -> bool:
     if image := retrieve_image_with_id(db, image_id):

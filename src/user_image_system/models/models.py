@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, TEXT
 
 from ..configs.database import Base
 
@@ -14,5 +14,5 @@ class Image(Base):
     __tablename__ = 'image'
 
     image_id = Column(Integer, primary_key=True, index=True) 
-    base_64 = Column(String)
+    base_64 = Column(TEXT)
     user_id = Column(ForeignKey('user'))

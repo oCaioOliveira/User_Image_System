@@ -50,6 +50,15 @@ def get_all_images_from_user(user_id: int, db: Session = Depends(get_db)) -> Gen
         detail="There are no registered images."
     )
 
+@image_router.post("/filter/{image_id_init}/{image_id_end}", status_code=status.HTTP_200_OK, summary='Filter images identifying with an initial and end id')
+def get_list_of_images_with_filter(image_id_init: int, image_id_end:int, db: Session = Depends(get_db)):
+    
+    images:list[ImageType] = []
+    for curr_id in range(image_id_init, image_id_end + 1):
+        images.append(get_image_with_id(curr_id, db))
+    
+    return images
+
 
 @image_router.get("/{image_id}", status_code=status.HTTP_200_OK, summary='Get an especific image by your id')
 def get_image_with_id(image_id: int, db: Session = Depends(get_db)) -> ImageType:

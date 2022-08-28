@@ -31,4 +31,4 @@ def test_imgs_filter(db_conn_with_images, initial_id, final_id):
     for image, correct_image in zip(response_images, images):
         assert isinstance(image, Image)
         assert image.image_id == correct_image[0]
-        assert image.base_64 == correct_image[1]
+        assert image.base_64 == correct_image[1].decode('utf-8')
